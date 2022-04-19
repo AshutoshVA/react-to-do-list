@@ -32,7 +32,17 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+table {
+  counter-reset: tableCount;
+}
+
+.counterCell:before {
+  content: counter(tableCount);
+  counter-increment: tableCount;
 }

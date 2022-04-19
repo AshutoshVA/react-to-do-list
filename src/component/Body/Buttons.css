@@ -1,0 +1,18 @@
+.option-btn-css {
+    text-decoration: none;
+    color: white;
+}
+
+.option-btn-css:hover {
+    color: white;
+}
+
+
+.btn-bg {
+    background-color: #006064;
+}
+
+.nav-center{
+    display: flex;
+    justify-content: center;
+}
