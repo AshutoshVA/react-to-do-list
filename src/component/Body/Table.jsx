@@ -1,10 +1,13 @@
 import React from "react";
 import "../Body/Table.css";
 import def from "../assets/images/default.png";
+
 import { useState } from "react";
 
+
 const Table = (props) => {
-  let [state, setState] = useState({ name: "", task: "" });
+  let [state, setState] = useState({ id: Math.floor(Math.random() * 9999999), name: "", task: "", status: "" });
+
 
   let changeInput = (e) => {
     console.log(e.target.value);
@@ -12,125 +15,138 @@ const Table = (props) => {
     setState({ ...state, [e.target.name]: e.target.value });
   };
 
+
   let submitInput = (e) => {
-    e.preventDefault();
-    console.log(state);
+    // console.log(state);
+    if (state.task !== "") {
+      e.preventDefault();
 
-    props.updateTaskItems((prev) => [
-      ...prev,
-      { name: state.name, task: state.task },
-    ]);
+      props.updateTaskItems((prev) => [...prev, { id: state.id, name: state.name, task: state.task, status: state.status }]);
 
-    setState({ name: "", task: "" });
+      setState({ id: Math.floor(Math.random() * 9999999), name: "", task: "", status: "" });
 
+    } else {
+      alert("field should not be blank")
+
+
+    }
     console.log(props.taskItems);
   };
 
+
+  // Delete Task Function
+  let deleteTask = (e) => {
+
+    console.log(e)
+    const remainingTask = props.taskItems.filter((task) => task.id !== e);
+
+    props.updateTaskItems(remainingTask);
+
+
+  }
+
+  // Edit Task Function
+
+  let editTask = (e) => {
+
+  
+    const remainingTask = props.taskItems.filter((task) => task.id !== e);
+
+    props.updateTaskItems(remainingTask);
+
+
+  }
+
+
+
+
   return (
     <div>
-      <div className="container mt-5">
-        <div className="row">
-          <div className="col-lg-4 mb-4">
-            <div className="card">
-              <div className="card-body">
-                <div>
-                  <span>
-                    <h5 className="card-title text-center">ToDo</h5>
-                  </span>
 
-                  <span>
-                    <i
-                      className="icon text-secondary fa-2x fa-solid fa-plus"
-                      data-bs-toggle="modal"
-                      data-bs-target="#myModal"
-                    ></i>
-                  </span>
-                </div>
 
-                <table className="table mt-2">
-                  <thead>
+
+      <div className="card">
+        <div className="card-body ">
+
+          <div>
+            <span>
+              <h5 className="card-title text-center">ToDo</h5>
+            </span>
+
+
+            <span>
+              <i
+                className="icon text-secondary fa-2x fa-solid fa-plus"
+                data-bs-toggle="modal"
+                data-bs-target="#myModal"
+              ></i>
+            </span>
+
+
+
+            <table className=" table  mt-2 table-wrapper-scroll-y my-custom-scrollbar">
+              <thead>
+                <tr>
+                  <th scope="col">Sr.No</th>
+                  <th scope="col">ID</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Profile</th>
+                  <th scope="col">Task</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Edit</th>
+                  <th scope="col">Delete</th>
+                  <th scope="col">Edit</th>
+                </tr>
+              </thead>
+              <tbody>
+
+
+                {props.taskItems.map((task) => (
+                  <>
                     <tr>
-                      <th scope="col">Sr.No</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Profile</th>
-                      <th scope="col">Task</th>
-                      <th scope="col">Status</th>
-                      <th scope="col">Edit</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {/* <tr>
-                      <th scope="row">1</th>
-
-                      <td>Ashutosh</td>
-
-                      {props.taskItems.map((name) => (
-                        <td name={name} kaey={name}>
-                          {name.name}
-                        </td>
-                      ))}
-
+                      <td className="counterCell"></td>
+                      <th>{task.id}</th>
+                      <td>{task.name}</td>
                       <td>
-                        <img className="image" src={def} alt="img" />
+                        <img className="image" src={def} />
                       </td>
-
-                      <td>task1</td>
-
-                      {props.taskItems.map((task) => (
-                        <td name={task} kaey={task}>
-                          {task.task}
-                        </td>
-                      ))}
-
-                      <td>
-                        <input
-                          type="checkbox"
-                          className="form-check-input"
-                          id="exampleCheck1"
-                        />
-                      </td>
+                      <td>{task.task}</td>
+                      <td>{task.status}</td>
                       <td>
                         <i class="fa-solid fa-pen"></i>
                       </td>
-                    </tr> */}
-
-                    {props.taskItems.map((task) => (
-                      <>
-                        <tr>
-                          <td className="counterCell"></td>
-                          <td>{task.name}</td>
-                          <td>{task.assignedTo}</td>
-                          <td>
-                            <img className="image" src={def} />
-                          </td>
-                          <td>{task.task}</td>
-                          <td>
-                            <input
-                              type="checkbox"
-                              className="form-check-input"
-                              id="exampleCheck1"
-                            />
-                          </td>
-                          <td>
-                            <i class="fa-solid fa-pen"></i>
-                          </td>
-                        </tr>
-                      </>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                      <td>
+                        <button className="btn btn-danger fa-solid fa-trash" onClick={() => deleteTask(task.id)}></button>
+                      </td>
+                      <td>
+                        <button className="btn btn-warning fa-solid fa-pen-clip" data-bs-toggle="modal"
+                          data-bs-target="#myModal1" onClick={() => editTask(task.id)}></button>
+                      </td>
+                    </tr>
+                  </>
+                ))}
+              </tbody>
+            </table>
           </div>
+
+
         </div>
+
       </div>
+
+
+
+
+
+
+
 
       {/* Add task modal */}
 
       {/* Scrollable modal */}
 
       <div
-        class="modal fade"
+        className="modal fade"
         id="myModal"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
@@ -138,52 +154,65 @@ const Table = (props) => {
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="staticBackdropLabel">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="staticBackdropLabel">
                 Modal title
               </h5>
               <button
                 type="button"
-                class="btn-close"
+                className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               <form>
-                <div class="mb-3">
-                  <label class="form-label">Name</label>
 
-                  <input
-                    type="text"
-                    value={state.name}
-                    onChange={changeInput}
-                    class="form-control"
-                    id="name"
-                    name="name"
-                  />
+                <div className="form-group">
+                  <label for="exampleFormControlFile1" >Assigned To </label>
+                  <select className="form-control" value={state.name} onChange={changeInput} name="name">
+                    <option selected>Select</option>
+                    <option value="Ashutosh">Ashutosh</option>
+                    <option value="Devraj">Devraj</option>
+                    <option value="Nikita">Nikita</option>
+                    <option value="Prajakta">Prajakta</option>
+                  </select>
                 </div>
 
-                <div class="mb-3">
-                  <label class="form-label">Task</label>
+
+                <div className="mb-3">
+                  <label className="form-label">Task</label>
 
                   <input
                     value={state.task}
                     type="text"
                     onChange={changeInput}
-                    class="form-control"
+                    className="form-control"
                     id="task"
                     name="task"
                   />
                 </div>
+
+
+                <div className="form-group">
+                  <label for="exampleFormControlFile1" >Status</label>
+                  <select className="form-control" value={state.status} onChange={changeInput} name="status">
+                    <option selected>Select</option>
+                    <option value="backlog">Back Log</option>
+                    <option value="inprogress">In Progress</option>
+                    <option value="onhold">On Hold</option>
+                    <option value="done">Done</option>
+                  </select>
+                </div>
+
               </form>
             </div>
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 type="button"
-                class="btn btn-secondary"
+                className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
                 Close
@@ -192,15 +221,105 @@ const Table = (props) => {
               <button
                 type="button"
                 onClick={submitInput}
-                class="btn btn-primary"
+                className="btn btn-primary"
+                data-bs-dismiss="modal"
               >
                 Add
               </button>
             </div>
-            ``
+
           </div>
         </div>
       </div>
+
+
+
+      {/* Edit Task Modal */}
+
+
+
+      <div
+        className="modal fade"
+        id="myModal1"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="staticBackdropLabel">
+                Modal title
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <form>
+
+                <div className="form-group">
+                  <label for="exampleFormControlFile1" >Assigned To </label>
+                  <select className="form-control" value={state.name} onChange={changeInput} name="name">
+                    <option selected>Select</option>
+                    <option value="Ashutosh">Ashutosh</option>
+                    <option value="Devraj">Devraj</option>
+                    <option value="Nikita">Nikita</option>
+                    <option value="Prajakta">Prajakta</option>
+                  </select>
+                </div>
+
+
+                <div className="mb-3">
+                  <label className="form-label">Task</label>
+
+                  <input
+                    readOnly
+
+                    value={props.taskItems.task}
+                    type="text"
+                    className="form-control"
+                    id="task"
+                    name="task"
+                  />{props.taskItems.task}
+                </div>
+
+
+                <div className="form-group">
+                  <label for="exampleFormControlFile1" >Status</label>
+                  <select className="form-control" value={state.status} onChange={changeInput} name="status">
+                    <option selected>Select</option>
+                    <option value="backlog">Back Log</option>
+                    <option value="inprogress">In Progress</option>
+                    <option value="onhold">On Hold</option>
+                    <option value="done">Done</option>
+                  </select>
+                </div>
+
+              </form>
+            </div>
+            <div className="modal-footer">
+
+
+              <button
+                type="button"
+                onClick={submitInput}
+                className="btn btn-primary"
+                data-bs-dismiss="modal"
+              >
+                Save
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 };

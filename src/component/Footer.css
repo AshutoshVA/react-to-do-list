@@ -1,9 +1,10 @@
 .bg-4 {
     background-color: #0097a7;
+    bottom: 0;
     color: black;
     height: 70px;
-    position: sticky;
-
+    position: absolute;
+    width: 100%;    
 }
 
 .color-url {
